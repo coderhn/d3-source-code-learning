@@ -1,4 +1,4 @@
-# D3: Data-Driven Documents
+# d3-source-code-learning:记录对 d3 源码的理解
 
 <a href="https://d3js.org"><img src="./docs/public/logo.svg" width="256" height="256"></a>
 
@@ -6,7 +6,7 @@
 
 ## Resources
 
-* [Documentation](https://d3js.org)
-* [Examples](https://observablehq.com/@d3/gallery)
-* [Releases](https://github.com/d3/d3/releases)
-* [Getting help](https://d3js.org/community)
+- [Documentation](https://d3js.org)
+- [Examples](https://observablehq.com/@d3/gallery)
+- [Releases](https://github.com/d3/d3/releases)
+- [Getting help](https://d3js.org/community)

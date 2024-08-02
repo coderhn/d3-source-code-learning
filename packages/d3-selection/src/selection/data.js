@@ -1,25 +1,27 @@
-import {Selection} from "./index.js";
-import {EnterNode} from "./enter.js";
+import { Selection } from "./index.js";
+import { EnterNode } from "./enter.js";
 import constant from "../constant.js";
 
 function bindIndex(parent, group, enter, update, exit, data) {
   var i = 0,
-      node,
-      groupLength = group.length,
-      dataLength = data.length;
+    node,
+    groupLength = group.length,
+    dataLength = data.length;
 
   // Put any non-null nodes that fit into update.
   // Put any null nodes into enter.
   // Put any remaining data into enter.
   for (; i < dataLength; ++i) {
+    // 选择集中存在dom并且数据中也存在，则将节点数据添加到update数组
     if (node = group[i]) {
       node.__data__ = data[i];
       update[i] = node;
     } else {
+      // 数据有，但没有对应的dom，则创建一个node并添加到enter数组里
       enter[i] = new EnterNode(parent, data[i]);
     }
   }
-
+  // 如果dom长度大于数据长度，则大于数据长度后的所有dom被添加进exit数组里
   // Put any non-null nodes that don’t fit into exit.
   for (; i < groupLength; ++i) {
     if (node = group[i]) {
@@ -30,12 +32,12 @@ function bindIndex(parent, group, enter, update, exit, data) {
 
 function bindKey(parent, group, enter, update, exit, data, key) {
   var i,
-      node,
-      nodeByKeyValue = new Map,
-      groupLength = group.length,
-      dataLength = data.length,
-      keyValues = new Array(groupLength),
-      keyValue;
+    node,
+    nodeByKeyValue = new Map,
+    groupLength = group.length,
+    dataLength = data.length,
+    keyValues = new Array(groupLength),
+    keyValue;
 
   // Compute the key for each node.
   // If multiple nodes have the same key, the duplicates are added to exit.
@@ -76,24 +78,25 @@ function datum(node) {
   return node.__data__;
 }
 
-export default function(value, key) {
+export default function (value, key) {
+  // 如果不传入任何参数则返回selection的__data__属性
   if (!arguments.length) return Array.from(this, datum);
 
   var bind = key ? bindKey : bindIndex,
-      parents = this._parents,
-      groups = this._groups;
+    parents = this._parents,
+    groups = this._groups;
 
   if (typeof value !== "function") value = constant(value);
 
   for (var m = groups.length, update = new Array(m), enter = new Array(m), exit = new Array(m), j = 0; j < m; ++j) {
     var parent = parents[j],
-        group = groups[j],
-        groupLength = group.length,
-        data = arraylike(value.call(parent, parent && parent.__data__, j, parents)),
-        dataLength = data.length,
-        enterGroup = enter[j] = new Array(dataLength),
-        updateGroup = update[j] = new Array(dataLength),
-        exitGroup = exit[j] = new Array(groupLength);
+      group = groups[j],
+      groupLength = group.length,
+      data = arraylike(value.call(parent, parent && parent.__data__, j, parents)),
+      dataLength = data.length,
+      enterGroup = enter[j] = new Array(dataLength),
+      updateGroup = update[j] = new Array(dataLength),
+      exitGroup = exit[j] = new Array(groupLength);
 
     bind(parent, group, enterGroup, updateGroup, exitGroup, data, key);
 
